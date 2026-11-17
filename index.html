@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toastmasters Mongolia Club: Role Sign-up</title>
+<style>
+:root{
+  --burg:#7B1B2E; --burg-dark:#5E1423; --burg-tint:#F6E9EC;
+  --ink:#241B1D; --muted:#6B5F62; --line:#E3D9DB; --bg:#FAF6F2; --card:#FFFFFF;
+  --open:#FFF6DC; --open-line:#E9D28B; --mine:#E3F3E6; --mine-line:#7CB98A; --taken:#F1EEEF;
+  --warn:#8A4B00;
+}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
+header{background:var(--burg);color:#fff;padding:22px 16px 20px}
+.wrap{max-width:1100px;margin:0 auto}
+header h1{margin:0 0 4px;font-size:22px;line-height:1.2}
+header p{margin:0;opacity:.92;font-size:14px}
+main{padding:16px 12px 120px}
+section.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:0 auto 14px;max-width:1100px}
+h2{margin:0 0 4px;font-size:17px}
+.sub{margin:0 0 12px;color:var(--muted);font-size:14px}
+.step{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--burg);color:#fff;font-size:13px;font-weight:700;margin-right:8px}
+label{font-weight:600;font-size:14px}
+select,input[type=text]{font:inherit;padding:10px 12px;border:1px solid #C9BDC0;border-radius:8px;background:#fff;color:var(--ink);min-height:44px;max-width:100%}
+select{min-width:260px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid #1F6FEB;outline-offset:2px}
+.btn{border:1px solid var(--burg);background:var(--burg);color:#fff;border-radius:8px;padding:10px 16px;min-height:44px;font-weight:600}
+.btn:hover{background:var(--burg-dark)}
+.btn.ghost{background:#fff;color:var(--burg)}
+.btn.ghost:hover{background:var(--burg-tint)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.notice{border-radius:8px;padding:10px 12px;margin:0 auto 14px;max-width:1100px;font-size:14px;background:#FFF4E0;border:1px solid #F0D49A;color:var(--warn)}
+.notice[hidden]{display:none}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:0 0 10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:14px;border-radius:4px;border:1px solid}
+.sw.open{background:var(--open);border-color:var(--open-line)}
+.sw.sel{background:var(--burg);border-color:var(--burg)}
+.sw.mine{background:var(--mine);border-color:var(--mine-line)}
+.sw.taken{background:var(--taken);border-color:#CFC6C8}
+.scroller{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:860px}
+th,td{padding:6px;border-bottom:1px solid var(--line);vertical-align:middle;text-align:center}
+thead th{background:#FBF4F5;position:sticky;top:0;z-index:2;font-size:13px;padding:10px 6px}
+thead th small{display:block;font-weight:400;color:var(--muted)}
+thead th.past{opacity:.5}
+.roleh{position:sticky;left:0;z-index:1;background:#fff;text-align:left;min-width:170px;max-width:170px;font-weight:600;font-size:14px;padding:8px 10px;border-right:1px solid var(--line)}
+thead .roleh{z-index:3;background:#FBF4F5}
+.roleh .info{display:block;font-weight:400;color:var(--muted);font-size:12px;line-height:1.3;margin-top:2px}
+tr.group td{background:#F4ECEE;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--burg);font-weight:700;padding:6px 10px;position:sticky;left:0}
+.cell{width:100%;min-height:46px;border-radius:8px;border:1px solid;padding:4px 6px;font-size:13px;line-height:1.25;display:flex;align-items:center;justify-content:center;text-align:center;gap:4px;word-break:break-word}
+button.cell.open{background:var(--open);border-color:var(--open-line);color:#6B5200}
+button.cell.open:hover{background:#FFEFC0}
+button.cell.sel{background:var(--burg);border-color:var(--burg);color:#fff;font-weight:600}
+button.cell.mine{background:var(--mine);border-color:var(--mine-line);color:#14532D;font-weight:600}
+button.cell.confirming{background:#FDE8E8;border-color:#E39A9A;color:#8B1A1A}
+button.cell.taken,div.cell.taken{background:var(--taken);border-color:#CFC6C8;color:#4A4144}
+div.cell.past, button.cell.past{opacity:.45;cursor:default}
+.mine-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.mine-list li{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--mine);border:1px solid var(--mine-line);border-radius:8px;padding:8px 12px}
+.empty{color:var(--muted);font-size:14px;margin:0}
+details{max-width:1100px;margin:0 auto 14px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+summary{cursor:pointer;font-weight:600}
+dl{margin:10px 0 0;display:grid;gap:8px}
+dt{font-weight:600}
+dd{margin:0;color:var(--muted);font-size:14px}
+#bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:2px solid var(--burg);padding:10px 12px;box-shadow:0 -6px 18px rgba(0,0,0,.08);z-index:20}
+#bar[hidden]{display:none}
+#bar .wrap{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+#barText{font-size:14px;flex:1 1 260px}
+#barText b{color:var(--burg)}
+#barWarn{display:block;color:var(--warn);font-size:13px}
+#toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:#241B1D;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;z-index:40;max-width:92vw;text-align:center}
+#toast[hidden]{display:none}
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
+#overlay[hidden]{display:none}
+#overlay .box{background:#fff;border-radius:12px;padding:16px;max-width:560px;width:100%}
+#overlay textarea{width:100%;min-height:180px;font:13px/1.4 ui-monospace,Menlo,Consolas,monospace;padding:10px;border:1px solid #C9BDC0;border-radius:8px}
+.foot{max-width:1100px;margin:6px auto 0;color:var(--muted);font-size:13px}
+@media (max-width:600px){ header h1{font-size:19px} select{min-width:0;width:100%} }
+.rolebtn{all:unset;cursor:pointer;display:block;width:100%;font-weight:600;font-size:14px;color:var(--ink)}
+.rolebtn:hover{color:var(--burg)}
+.rolebtn:focus-visible{outline:3px solid #1F6FEB;outline-offset:2px;border-radius:4px}
+.rolebtn .i{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-left:6px;border-radius:50%;border:1px solid var(--burg);color:var(--burg);font-size:11px;font-weight:700;vertical-align:1px}
+#roleDlg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px}
+#roleDlg[hidden]{display:none}
+#roleDlg .box{background:#fff;border-radius:14px;max-width:480px;width:100%;padding:18px;max-height:90vh;overflow:auto}
+#roleDlg h2{font-size:20px;margin:0}
+#roleDlg .when{color:var(--burg);font-weight:600;margin:2px 0 10px;min-height:1em}
+#roleDlg h3{margin:12px 0 2px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+#roleDlg p{margin:0}
+#roleDlg .actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}
+
+.hint{color:var(--muted);font-size:13px;margin:6px 0 0}
+.err{color:#8B1A1A}
+.vpe-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+#updated{color:var(--muted);font-size:12px;margin:8px 0 0;text-align:right}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Toastmasters Mongolia Club: role sign-up</h1>
+    <p>Meetings every Thursday, 18:40 to 21:00, F1, Orient Plaza, Ulaanbaatar</p>
+  </div>
+</header>
+
+<main>
+  <div id="notice" class="notice" hidden></div>
+
+  <section class="card" id="gate" aria-labelledby="h-gate" hidden>
+    <h2 id="h-gate">Club access code</h2>
+    <p class="sub">Enter the code the VPE shared with members.</p>
+    <div class="row">
+      <input type="password" id="gateInput" autocomplete="off" placeholder="Access code" aria-label="Club access code">
+      <button class="btn" id="gateBtn" type="button">Enter</button>
+    </div>
+    <p class="hint err" id="gateErr" hidden>That code did not work. Check it and try again.</p>
+  </section>
+
+  <div id="app" hidden>
+    <section class="card" aria-labelledby="h-who">
+      <h2 id="h-who"><span class="step">1</span>Who are you?</h2>
+      <p class="sub">Pick your name from the list. New here? Choose "Other" and type your name.</p>
+      <div class="row">
+        <label for="nameSel" style="position:absolute;left:-9999px">Your name</label>
+        <select id="nameSel"></select>
+        <input type="text" id="nameOther" maxlength="60" placeholder="Type your full name" aria-label="Your full name" hidden>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="h-pick">
+      <h2 id="h-pick"><span class="step">2</span>Choose your roles and dates</h2>
+      <p class="sub">Tap a yellow cell to read what the role involves, then select it. Pick as many roles and Thursdays as you like and confirm at the bottom. Tap a role name to read about it without choosing a date.</p>
+      <div class="legend" aria-hidden="true">
+        <span><i class="sw open"></i>Open</span>
+        <span><i class="sw sel"></i>Selected by you</span>
+        <span><i class="sw mine"></i>Your confirmed role</span>
+        <span><i class="sw taken"></i>Taken</span>
+      </div>
+      <div class="scroller"><table id="grid"></table></div>
+      <p id="updated"></p>
+    </section>
+
+    <section class="card" aria-labelledby="h-mine">
+      <h2 id="h-mine"><span class="step">3</span>Your confirmed roles</h2>
+      <div id="mine"></div>
+    </section>
+
+    <details>
+      <summary>What does each role do?</summary>
+      <dl id="roleInfo"></dl>
+    </details>
+
+    <details id="vpeBox">
+      <summary>For the VPE</summary>
+      <div id="vpeLogin">
+        <p class="sub" style="margin-top:10px">Enter the VPE code to cancel anyone's role and copy the schedule into the Google Sheet.</p>
+        <div class="vpe-row">
+          <input type="password" id="vpeInput" autocomplete="off" placeholder="VPE code" aria-label="VPE code">
+          <button class="btn ghost" id="vpeBtn" type="button">Sign in as VPE</button>
+        </div>
+        <p class="hint err" id="vpeErr" hidden>That VPE code did not work.</p>
+      </div>
+      <div id="vpeTools" hidden>
+        <p class="sub" style="margin-top:10px">VPE mode is on. You can cancel any role by tapping it twice. The button copies every confirmed sign-up as a table in the same order as the "Schedule" tab; paste it into cell D2 of that tab.</p>
+        <div class="vpe-row">
+          <button class="btn ghost" id="copySheet" type="button">Copy table for Google Sheet</button>
+          <button class="btn ghost" id="vpeOut" type="button">Sign out of VPE mode</button>
+        </div>
+      </div>
+    </details>
+
+    <p class="foot">Sign-ups are saved for everyone and show on all phones within about 20 seconds. Need a change after the meeting week has started? Message the VPE.</p>
+  </div>
+</main>
+
+<div id="bar" hidden>
+  <div class="wrap">
+    <div id="barText"></div>
+    <div class="row">
+      <button class="btn ghost" id="clearBtn" type="button">Clear</button>
+      <button class="btn ghost" id="msgBtn" type="button">Copy as message</button>
+      <button class="btn" id="confirmBtn" type="button">Confirm sign-up</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite" hidden></div>
+
+<div id="overlay" hidden>
+  <div class="box" role="dialog" aria-modal="true" aria-labelledby="ovTitle">
+    <h2 id="ovTitle">Copy this text</h2>
+    <p class="sub" id="ovHint">Select all, then copy.</p>
+    <textarea id="ovText" readonly></textarea>
+    <div class="row" style="margin-top:10px;justify-content:flex-end"><button class="btn" id="ovClose" type="button">Close</button></div>
+  </div>
+</div>
+
+<div id="roleDlg" hidden>
+  <div class="box" role="dialog" aria-modal="true" aria-labelledby="rdTitle">
+    <h2 id="rdTitle"></h2>
+    <div class="when" id="rdDate"></div>
+    <h3>What you do</h3>
+    <p id="rdResp"></p>
+    <div id="rdBenWrap"><h3>What you gain</h3><p id="rdBen"></p></div>
+    <div class="actions">
+      <button class="btn ghost" id="rdClose" type="button">Close</button>
+      <button class="btn" id="rdAct" type="button"></button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
