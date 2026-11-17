@@ -1,120 +1,67 @@
-// Club settings. To add new Thursdays, edit this file and push to GitHub:
-// Netlify rebuilds and the sign-up page updates by itself.
-// Member names are NOT stored here (this repository is public). They live in the
-// MEMBERS environment variable on Netlify, as a JSON list of names.
+// Toastmasters Mongolia: copies web sign-ups into the "Schedule" tab.
+// Sign-ups win over names typed by hand. Runs on a time trigger (see steps).
+var SIGNUP_URL = 'https://tm-mongolia-role-signup.netlify.app/api/signups?format=text&code=TM-36948';
+var ROLES = {
+  tm: 'Toastmaster', warm: 'Warm-up Master', word: 'Word Master', tt: 'Table Topics Master',
+  ge: 'General Evaluator', ah: 'Ah-Counter', gram: 'Grammarian', timer: 'Timer',
+  joke: 'Joke Master', sp1: 'Speaker 1', ev1: 'Evaluator 1', sp2: 'Speaker 2',
+  ev2: 'Evaluator 2', sp3: 'Speaker 3', ev3: 'Evaluator 3', backup: 'Back-up'
+};
+var MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
 
-export type Role = { id: string; g: string; label: string; resp: string; benefit: string };
+function syncSignups() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName('Schedule');
+  var res = UrlFetchApp.fetch(SIGNUP_URL, { muteHttpExceptions: true });
+  if (res.getResponseCode() !== 200) throw new Error('Sign-up site returned ' + res.getResponseCode());
 
-// Meeting dates shown on the page (YYYY-MM-DD, Thursdays).
-export const DATES: string[] = [
-  "2026-11-19",
-  "2026-11-26",
-  "2026-12-03",
-  "2026-12-10",
-  "2026-12-17",
-  "2026-12-24",
-  "2026-12-31"
-];
+  var SIGN = {};
+  res.getContentText().split('\n').forEach(function (line) {
+    var p = line.split('\t');
+    if (p.length === 2 && p[1].trim()) SIGN[p[0].trim()] = p[1].trim();
+  });
 
-// Order matches columns D to Q of the Schedule tab in the Google Sheet.
-export const ROLES: Role[] = [
-  {
-    "id": "tm",
-    "g": "Meeting leadership",
-    "label": "Toastmaster",
-    "resp": "Leads the entire meeting, introduces each session and role holder, maintains the meeting flow, and ensures a positive and engaging experience for everyone.",
-    "benefit": "Develops public speaking, facilitation, time management, event hosting, and leadership skills."
-  },
-  {
-    "id": "warm",
-    "g": "Meeting leadership",
-    "label": "Warm-up Master",
-    "resp": "Conducts a short icebreaker or energizing activity to help members relax, interact, and feel comfortable before the meeting begins.",
-    "benefit": "Builds creativity, audience engagement, facilitation, spontaneity, and the ability to connect with different personalities."
-  },
-  {
-    "id": "word",
-    "g": "Meeting leadership",
-    "label": "Word Master",
-    "resp": "Introduces the Word of the Day, explains its meaning and usage, and encourages members to incorporate it naturally into their speeches and conversations.",
-    "benefit": "Expands vocabulary, improves language proficiency, and develops the ability to explain and communicate ideas clearly."
-  },
-  {
-    "id": "tt",
-    "g": "Meeting leadership",
-    "label": "Table Topics Master",
-    "resp": "Prepares and delivers interesting impromptu speaking questions, invites members to participate, and manages the Table Topics session.",
-    "benefit": "Strengthens creativity, quick thinking, question design, facilitation, and the ability to think on your feet."
-  },
-  {
-    "id": "ge",
-    "g": "Evaluation and support",
-    "label": "General Evaluator",
-    "resp": "Evaluates the overall quality of the meeting, coordinates the evaluation team, invites reports from supporting role holders, and provides constructive feedback on how the meeting can improve.",
-    "benefit": "Develops critical thinking, observation, constructive feedback, leadership, and the ability to evaluate performance objectively."
-  },
-  {
-    "id": "ah",
-    "g": "Evaluation and support",
-    "label": "Ah-Counter",
-    "resp": "Listens for filler words and sounds such as \"um,\" \"ah,\" \"you know,\" and unnecessary repetitions, then reports observations at the end of the meeting.",
-    "benefit": "Develops active listening, attention to detail, self-awareness, and greater awareness of verbal communication habits."
-  },
-  {
-    "id": "gram",
-    "g": "Evaluation and support",
-    "label": "Grammarian",
-    "resp": "Observes members' language usage, identifies effective expressions and grammatical mistakes, and provides a report with examples and suggestions for improvement.",
-    "benefit": "Enhances grammar, vocabulary, language awareness, listening skills, and the ability to communicate more precisely."
-  },
-  {
-    "id": "timer",
-    "g": "Evaluation and support",
-    "label": "Timer",
-    "resp": "Monitors the duration of speeches and meeting segments, displays timing signals, and provides a timing report to help everyone stay within the allocated time.",
-    "benefit": "Strengthens time management, concentration, discipline, attention to detail, and an understanding of effective speech pacing."
-  },
-  {
-    "id": "joke",
-    "g": "Evaluation and support",
-    "label": "Joke Master",
-    "resp": "Shares a short, appropriate joke or humorous story to bring energy and laughter to the meeting.",
-    "benefit": "Builds confidence, storytelling ability, creativity, humor, and the ability to connect with an audience through entertainment."
-  },
-  {
-    "id": "sp1",
-    "g": "Speakers and evaluators",
-    "label": "Speaker 1",
-    "resp": "Prepared Speaker: delivers a structured speech based on a selected Pathways project or personal learning objective, applying specific communication and presentation skills.",
-    "benefit": "Develops speech organization, storytelling, confidence, body language, vocal variety, persuasion, and the ability to communicate ideas effectively."
-  },
-  {
-    "id": "ev1",
-    "g": "Speakers and evaluators",
-    "label": "Evaluator 1",
-    "resp": "Speech Evaluator: listens carefully to an assigned speaker, identifies their strengths and areas for improvement, and delivers a constructive evaluation with practical recommendations.",
-    "benefit": "Improves active listening, analytical thinking, empathy, public speaking, and the ability to give and receive constructive feedback."
-  },
-  {
-    "id": "sp2",
-    "g": "Speakers and evaluators",
-    "label": "Speaker 2",
-    "resp": "Prepared Speaker: delivers a structured speech based on a selected Pathways project or personal learning objective, applying specific communication and presentation skills.",
-    "benefit": "Develops speech organization, storytelling, confidence, body language, vocal variety, persuasion, and the ability to communicate ideas effectively."
-  },
-  {
-    "id": "ev2",
-    "g": "Speakers and evaluators",
-    "label": "Evaluator 2",
-    "resp": "Speech Evaluator: listens carefully to an assigned speaker, identifies their strengths and areas for improvement, and delivers a constructive evaluation with practical recommendations.",
-    "benefit": "Improves active listening, analytical thinking, empathy, public speaking, and the ability to give and receive constructive feedback."
-  },
-  {
-    "id": "backup",
-    "g": "Speakers and evaluators",
-    "label": "Back-up",
-    "resp": "Stands by to take over as a speaker or evaluator if someone cannot attend, so the meeting keeps its full programme.",
-    "benefit": "Builds readiness and flexibility, and you learn how the whole meeting fits together."
+  var props = PropertiesService.getScriptProperties();
+  var PREV = JSON.parse(props.getProperty('prev') || '{}');
+
+  var data = sh.getDataRange().getValues();
+  var header = data[0].map(function (h) { return String(h).trim(); });
+  var tz = ss.getSpreadsheetTimeZone();
+  var rowByMD = {};
+  for (var r = 1; r < data.length; r++) {
+    var a = data[r][0], md = null;
+    if (a instanceof Date) md = Utilities.formatDate(a, tz, 'MM-dd');
+    else {
+      var m = String(a).match(/([A-Za-z]{3})[A-Za-z]*\.?\s+(\d{1,2})\s*$/);
+      if (m && MONTHS.indexOf(m[1].toLowerCase()) >= 0) {
+        var mo = MONTHS.indexOf(m[1].toLowerCase()) + 1;
+        md = ('0' + mo).slice(-2) + '-' + ('0' + m[2]).slice(-2);
+      }
+    }
+    if (md) rowByMD[md] = r;
   }
-];
 
+  function cellFor(key) {
+    var parts = key.split('_');
+    var r = rowByMD[parts[0].slice(5)];
+    var c = header.indexOf(ROLES[parts[1]]);
+    return (r === undefined || c < 0) ? null : { r: r, c: c };
+  }
+
+  var changes = 0;
+  Object.keys(SIGN).forEach(function (key) {
+    var pos = cellFor(key); if (!pos) return;
+    if (String(data[pos.r][pos.c]).trim() !== SIGN[key]) {
+      sh.getRange(pos.r + 1, pos.c + 1).setValue(SIGN[key]); changes++;
+    }
+  });
+  Object.keys(PREV).forEach(function (key) {
+    if (SIGN[key] !== undefined) return;            // still signed up
+    var pos = cellFor(key); if (!pos) return;
+    if (String(data[pos.r][pos.c]).trim() === PREV[key]) {   // cancelled: clear it
+      sh.getRange(pos.r + 1, pos.c + 1).clearContent(); changes++;
+    }
+  });
+  props.setProperty('prev', JSON.stringify(SIGN));
+  Logger.log('Sync done, ' + changes + ' change(s)');
+}
