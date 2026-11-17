@@ -1,0 +1,13 @@
+{
+  "name": "tm-mongolia-signup",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Weekly role sign-up page for Toastmasters Mongolia Club",
+  "dependencies": {
+    "@netlify/blobs": "^11.1.9"
+  },
+  "devDependencies": {
+    "@netlify/functions": "^6.1.1"
+  }
+}
